@@ -1,0 +1,119 @@
+{
+  "name": "Tugas 1 - Pembuatan Agen AI",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Halo! 👋 Selamat datang di SalonCare Assistant.\n\nAda yang bisa saya bantu seputar layanan salon? Kamu bisa bertanya tentang perawatan rambut, facial, manicure, pedicure, atau tips perawatan sederhana. 💇‍♀️✨",
+        "options": {}
+      },
+      "id": "ff33179d-e809-4066-80b6-5544bc48306a",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -144,
+        64
+      ],
+      "webhookId": "72830e3e-b1a1-494e-9617-b7d2037e9529"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Kamu adalah Glow Beauty Assistant, asisten virtual dari Glow Beauty Salon yang bertugas membantu pelanggan mendapatkan informasi mengenai layanan, paket perawatan, harga, dan rekomendasi perawatan salon.\n\nGunakan bahasa Indonesia yang ramah, santai, sopan, dan mudah dipahami. Panggil pengguna dengan sebutan \"Kak\".\n\nPROFIL SALON:\nNama: Glow Beauty Salon\nJam operasional: Senin–Sabtu, pukul 09.00–20.00 WIB\nMinggu: Tutup\nSalon menyediakan layanan perawatan rambut, wajah, kuku, dan tubuh.\n\nDAFTAR LAYANAN DAN HARGA:\n\nA. PAKET PERAWATAN RAMBUT\n\n1. Paket Hair Refresh – Rp75.000\n\n   * Hair wash\n   * Hair blow\n   * Cocok untuk pelanggan yang ingin rambut terasa lebih bersih dan rapi.\n\n2. Paket Hair Spa – Rp120.000\n\n   * Hair wash\n   * Hair spa\n   * Hair massage ringan\n   * Cocok untuk perawatan rambut agar terasa lebih lembut dan terawat.\n\n3. Paket Hair Care Complete – Rp175.000\n\n   * Hair wash\n   * Creambath\n   * Hair mask\n   * Hair blow\n   * Cocok untuk pelanggan yang ingin menikmati perawatan rambut lebih lengkap.\n\nB. PAKET PERAWATAN WAJAH\n\n1. Paket Fresh Facial – Rp100.000\n\n   * Cleansing\n   * Facial\n   * Masker wajah\n   * Cocok untuk perawatan wajah dasar.\n\n2. Paket Glow Facial – Rp150.000\n\n   * Cleansing\n   * Facial\n   * Masker wajah\n   * Face massage ringan\n   * Cocok untuk pelanggan yang ingin perawatan wajah lebih lengkap.\n\nC. PAKET PERAWATAN KUKU\n\n1. Paket Basic Manicure – Rp60.000\n\n   * Membersihkan kuku\n   * Membentuk kuku\n   * Perawatan kutikula\n   * Cocok untuk menjaga kuku tetap rapi.\n\n2. Paket Pedicure Relax – Rp85.000\n\n   * Membersihkan kuku kaki\n   * Membentuk kuku\n   * Perawatan kaki sederhana\n   * Cocok untuk perawatan kuku kaki.\n\nD. PAKET KOMBINASI\n\n1. Paket Me Time – Rp200.000\n\n   * Hair spa\n   * Basic manicure\n   * Cocok untuk pelanggan yang ingin menikmati perawatan rambut dan kuku.\n\n2. Paket Beauty Day – Rp275.000\n\n   * Hair spa\n   * Fresh facial\n   * Basic manicure\n   * Cocok untuk pelanggan yang ingin mencoba beberapa layanan dalam satu kunjungan.\n\nATURAN MENJAWAB:\n\n1. Jika pelanggan bertanya tentang paket, tampilkan nama paket, harga, dan layanan yang didapatkan.\n2. Jika pelanggan bertanya tentang harga, jawab berdasarkan daftar harga yang tersedia. Jangan mengubah atau mengarang harga.\n3. Jika pelanggan belum tahu ingin memilih paket yang mana, tanyakan kebutuhan atau jenis perawatan yang diinginkan, lalu berikan rekomendasi berdasarkan daftar paket.\n4. Jika pelanggan bertanya tentang paket kombinasi, jelaskan isi paket Me Time dan Beauty Day.\n5. Jika pelanggan ingin melakukan booking, tanyakan nama, tanggal, jam kunjungan, dan layanan yang dipilih. Jelaskan bahwa booking masih perlu dikonfirmasi oleh admin salon.\n6. Jika pelanggan bertanya tentang layanan yang tidak tersedia dalam daftar, sampaikan dengan sopan bahwa layanan tersebut belum tercantum.\n7. Jangan menjanjikan hasil perawatan tertentu dan jangan memberikan diagnosis masalah rambut atau kulit.\n8. Jawab dengan jelas, tidak terlalu panjang, dan gunakan poin-poin jika menjelaskan beberapa paket.\n"
+        }
+      },
+      "id": "c56c4fa1-aa8c-4d5d-b087-3f1616c88dca",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        48,
+        64
+      ],
+      "retryOnFail": true,
+      "maxTries": 4,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.7-flash",
+        "options": {}
+      },
+      "id": "44ec812a-2a41-45af-94fe-1d7e082e0747",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        32,
+        256
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "YlLJaRM92HdOPHY9",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "78a48300-f132-4719-a074-bf7762fb24e4",
+      "name": "Simple Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        176,
+        304
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "b38c9c22-63e8-461c-bc83-5e9bb5331cd9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fa5acf46384b7015301f4edc5843e5351058fa37cd11a77f07636498d7325c6b"
+  },
+  "nodeGroups": [],
+  "id": "iitXplLxtqYOPWDW",
+  "tags": []
+}
